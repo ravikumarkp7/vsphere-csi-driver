@@ -1449,7 +1449,7 @@ func invokeVCenterReboot(ctx context.Context, host string) error {
 func invokeVCenterServiceControl(ctx context.Context, command, service, host string) error {
 	//sshCmd := fmt.Sprintf("service-control --%s %s", command, service)
 	sshCmd := fmt.Sprintf("-o 'ProxyJump worker@10.160.252.164' -o 'StrictHostKeyChecking no' service-control --%s %s", command, service)
-	host = "192.168.111.82"
+	host = "192.168.111.82:22"
 	framework.Logf("Invoking command %v on vCenter host %v", sshCmd, host)
 	result, err := fssh.SSH(ctx, sshCmd, host, framework.TestContext.Provider)
 	if err != nil || result.Code != 0 {
