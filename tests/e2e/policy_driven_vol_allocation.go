@@ -3615,7 +3615,7 @@ func setVpxdTaskTimeout(ctx context.Context, taskTimeout int) {
 
 	//grepCmd := "grep '<timeout>' /etc/vmware-vpx/vpxd.cfg"
 	grepCmd := "-o 'ProxyJump worker@10.160.252.164' -o 'StrictHostKeyChecking no' grep '<timeout>' /etc/vmware-vpx/vpxd.cfg"
-	vcAddress = "192.168.111.82"
+	vcAddress = "192.168.111.82:22"
 	//grepCmd := "grep '<timeout>' /etc/vmware-vpx/vpxd.cfg"
 	framework.Logf("Invoking command '%v' on vCenter host %v", grepCmd, vcAddress)
 	result, err := fssh.SSH(ctx, grepCmd, vcAddress, framework.TestContext.Provider)
