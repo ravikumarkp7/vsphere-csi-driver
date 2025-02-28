@@ -3613,7 +3613,10 @@ func setVpxdTaskTimeout(ctx context.Context, taskTimeout int) {
 	timeoutMatches := false
 	diffTimeoutExists := false
 
-	grepCmd := "grep '<timeout>' /etc/vmware-vpx/vpxd.cfg"
+	//grepCmd := "grep '<timeout>' /etc/vmware-vpx/vpxd.cfg"
+	grepCmd := "-o 'ProxyJump worker@10.160.252.164' -o 'StrictHostKeyChecking no' grep '<timeout>' /etc/vmware-vpx/vpxd.cfg"
+	vcAddress = "192.168.111.82"
+	//grepCmd := "grep '<timeout>' /etc/vmware-vpx/vpxd.cfg"
 	framework.Logf("Invoking command '%v' on vCenter host %v", grepCmd, vcAddress)
 	result, err := fssh.SSH(ctx, grepCmd, vcAddress, framework.TestContext.Provider)
 	if err != nil {
@@ -3624,9 +3627,9 @@ func setVpxdTaskTimeout(ctx context.Context, taskTimeout int) {
 
 	// cmd to add the timeout value to the file
 	sshCmd := fmt.Sprintf(
-		"sed -i 's/<task>/<task>\\n    <timeout>%v<\\/timeout>/' /etc/vmware-vpx/vpxd.cfg", taskTimeout)
+		"-o 'ProxyJump worker@10.160.252.164' -o 'StrictHostKeyChecking no' sed -i 's/<task>/<task>\\n    <timeout>%v<\\/timeout>/' /etc/vmware-vpx/vpxd.cfg", taskTimeout)
 	if result.Code == 0 {
-		grepCmd2 := fmt.Sprintf("grep '<timeout>%v</timeout>' /etc/vmware-vpx/vpxd.cfg", taskTimeout)
+		grepCmd2 := fmt.Sprintf("-o 'ProxyJump worker@10.160.252.164' -o 'StrictHostKeyChecking no' grep '<timeout>%v</timeout>' /etc/vmware-vpx/vpxd.cfg", taskTimeout)
 		framework.Logf("Invoking command '%v' on vCenter host %v", grepCmd2, vcAddress)
 		result2, err := fssh.SSH(ctx, grepCmd2, vcAddress, framework.TestContext.Provider)
 		if err != nil {
@@ -3650,10 +3653,10 @@ func setVpxdTaskTimeout(ctx context.Context, taskTimeout int) {
 	}
 	if diffTimeoutExists {
 		sshCmd = fmt.Sprintf(
-			"sed -i 's/<timeout>[0-9]*<\\/timeout>/<timeout>%v<\\/timeout>/' /etc/vmware-vpx/vpxd.cfg", taskTimeout)
+			"-o 'ProxyJump worker@10.160.252.164' -o 'StrictHostKeyChecking no' sed -i 's/<timeout>[0-9]*<\\/timeout>/<timeout>%v<\\/timeout>/' /etc/vmware-vpx/vpxd.cfg", taskTimeout)
 	}
 	if taskTimeout == 0 {
-		sshCmd = "sed -i '/<timeout>[0-9]*<\\/timeout>/d' /etc/vmware-vpx/vpxd.cfg"
+		sshCmd = "-o 'ProxyJump worker@10.160.252.164' -o 'StrictHostKeyChecking no' sed -i '/<timeout>[0-9]*<\\/timeout>/d' /etc/vmware-vpx/vpxd.cfg"
 	}
 
 	framework.Logf("Invoking command '%v' on vCenter host %v", sshCmd, vcAddress)
